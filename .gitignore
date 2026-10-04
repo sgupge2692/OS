@@ -2,3 +2,7 @@
 logs/*.log
 .venv/
 __pycache__/
+
+# 講義データ(動画・音声・文字起こし)はGit管理しない。フォルダ構成(.gitkeep)だけ残す
+data/university/*/*/*
+!data/university/*/*/.gitkeep
