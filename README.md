@@ -80,3 +80,24 @@ git push -u origin feature/<Issue番号>-<名前>
 mdfind -name "ファイル名"
 open -R <パス>   # Finderで表示
 ```
+
+### Transcribe (skills/university)
+音声ファイルをローカルで文字起こしして、.txt を出力する(Apple Silicon、mlx-whisper)。
+```bash
+source .venv/bin/activate    # ターミナルを開き直したときに毎回必要
+python skills/university/transcribe.py <音声ファイル>
+python skills/university/transcribe.py <音声ファイル> --force   # 出力済みでも上書き
+```
+- 既定のモデルは medium(1時間半の講義で約9分)。初回のみモデル(約1.5GB)をダウンロードする
+- 出力先は、音声が「音声」フォルダにあれば隣の「文字起こし」フォルダ、それ以外は音声と同じフォルダ(`--out-dir` で指定可)
+- 出力は `[hh:mm:ss] 本文` の形式で、1行ずつ時刻が付く
+- 出力済みの場合はスキップする
+
+### 環境構築 (.venv)
+```bash
+brew install uv
+uv venv --python 3.12 .venv
+source .venv/bin/activate
+uv pip install mlx-whisper
+```
+- `python3 -m venv` は Python 3.14 で pip の導入に失敗したため、uv を使う
