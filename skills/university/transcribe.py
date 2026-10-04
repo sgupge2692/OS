@@ -5,7 +5,7 @@
 Apple Silicon 上で mlx-whisper を使う(外部 API 不要)。
 
 出力先:
-    音声が「音声」フォルダにある場合は、その隣の「文字起こし」フォルダ。
+    音声が audio/ にある場合は、その隣の transcripts/(旧構成の「音声」なら「文字起こし」)。
     それ以外は音声と同じフォルダ。--out-dir で指定もできる。
 
 使い方:
@@ -27,9 +27,17 @@ def fmt_time(sec: float) -> str:
     return f"{sec // 3600:02d}:{sec % 3600 // 60:02d}:{sec % 60:02d}"
 
 
+# 音声フォルダ名 -> 文字起こしフォルダ名(音声がこの名前のフォルダにあれば、隣の対応するフォルダへ出力)
+OUT_DIR_NAMES = {
+    "audio": "transcripts",   # data/university/<科目>/audio -> transcripts
+    "音声": "文字起こし",        # 旧構成(デスクトップの科目フォルダ)
+}
+
+
 def default_out_dir(audio: Path) -> Path:
-    if audio.parent.name == "音声":
-        return audio.parent.parent / "文字起こし"
+    name = OUT_DIR_NAMES.get(audio.parent.name)
+    if name:
+        return audio.parent.parent / name
     return audio.parent
 
 
